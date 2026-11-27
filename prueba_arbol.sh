@@ -248,7 +248,3 @@ opcion_2() {
     printf 'Presione Enter para regresar al menu...'
     read -r _
 }
-
-if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
-    opcion_2
-fi
