@@ -105,16 +105,18 @@ menu_principal() {
         echo -e "  [3] Opción 3 - Inspeccion de recursos de un PID"
         echo -e "  [4] Opcion 4 - Control de prioridad y senales"
 	echo -e "  [5] Opcion 5 - Monitor en tiempo real"
+	echo -e "  [6] Opcion 6 - Buscar procesos por nombre"
         echo -e "  [0] Salir\n"
         echo -e "----------------------------------------------------------------------"
-        read -rp "Seleccione una opción [0-5]: " opcion
+        read -rp "Seleccione una opción [0-6]: " opcion
 
         case $opcion in
-            1) opcion_1 ;;
+            1) Filtrar_procesos ;;
             2) opcion_2 ;;
             3) opcion_3 ;;
             4) opcion_4 ;;
 	    5) opcion_5 ;;
+	    6) Buscar_procesos ;;
 	    0)
                 echo -e "\nSaliendo del sistema.\n"
                 exit 0
@@ -134,6 +136,8 @@ if [[ ! -f "$RUTA_SCRIPT/control_procesos.sh" ]]; then
     exit 1
 fi
 source "$RUTA_SCRIPT/control_procesos.sh"
+source "$RUTA_SCRIPT/filtrar_procesos.sh"
+source "$RUTA_SCRIPT/buscar_procesos.sh"
 
 opcion_3() {
     local modulo="$RUTA_SCRIPT/revision_archivo_auditoria.sh"

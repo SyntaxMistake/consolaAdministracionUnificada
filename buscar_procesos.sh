@@ -1,6 +1,6 @@
 #!/bin/bash
 #autor : Francesco
-#opcion 2 : Busca procesos con coincidencias parcial de nombres o por nombre exacto de binarios
+#opcion 6 : Busca procesos por coincidencia parcial de nombre o por nombre exacto de binario
 Buscar_procesos() {
     clear
     echo "===== BUSCAR PROCESOS ====="
@@ -37,8 +37,4 @@ Buscar_procesos() {
     esac
     read -p "Presione Enter para continuar..."
 }
-
-
-
-
 
