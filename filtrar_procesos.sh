@@ -7,7 +7,7 @@ Filtrar_procesos(){
     echo "Filtrar Procesos"
     echo "1 Filtrar por usuario"
     echo "2 Filtrar por estado (R,S,D,Z)"
-    echo "3 Filtrar por consume de CPU"
+    echo "3 Filtrar por consumo de CPU"
     echo
     read -p "Seleccione una opcion: " opcion
         case $opcion in
@@ -18,7 +18,7 @@ Filtrar_procesos(){
             ;;
         2)
             # pedir letra de estado y filtrar
-            read -p"Ingrese la letra del estado para filtar" estado
+            read -p"Ingrese la letra del estado para filtrar" estado
             ps -eo pid,user,stat,comm | awk -v letra="$estado" 'NR==1 || $3 ~ "^" letra'
             ;;
         3)
@@ -32,4 +32,3 @@ Filtrar_procesos(){
     esac
     read -p "Presione Enter para continuar..."
 }
-Filtrar_procesos
