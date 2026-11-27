@@ -1,28 +1,98 @@
 #!/usr/bin/env bash
 
-TITULO_PROYECTO="Asistente Interactivo de Control y Auditorioa de procesos"
+TITULO_PROYECTO="Asistente Interactivo de Control y Auditoria de procesos"
 GRUPO="Grupo #7"
 
 mostrar_encabezado() {
     clear
-    echo -e "======================================================================"
-    echo -e "        UNIVERSIDAD TECNOLÓGICA DE PANAMÁ - FISC                      "
+    echo -e "=============================================================================="
+    echo -e "        UNIVERSIDAD TECNOLÓGICA DE PANAMÁ - FISC                            "
     echo -e "  Proyecto: ${TITULO_PROYECTO}"
     echo -e "  ${GRUPO} "
-    echo -e "======================================================================\n"
+    echo -e "==============================================================================\n"
 }
 
-opcion_5(){
-	echo -e "=================================================================="
-	echo -e "MONITOR EN TIEMPO REAL"
-	echo -e "=================================================================="
-	local tipo valor
-	echo -e "Filtrar por:\n [1] Usuario\n [2] PID especifico\n"
-	echo -e ""
-	tipo = $(pedir_dato "Seleccione filtro [1-2]")
+opcion_5() {
+    mostrar_encabezado
+    echo -e "=============================================================================="
+    echo -e "MONITOR EN TIEMPO REAL"
+    echo -e "=============================================================================="
+    local tipo valor intervalo salida_bucle
 
-	if [[ "$tipo" == "1" ]]; then
+    echo -e "Filtrar por:\n [1] Usuario\n [2] PID especifico\n"
+    read -rp "Seleccione filtro [1-2] [1]: " tipo
+    tipo="${tipo:-1}"
 
+    if [[ "$tipo" == "1" ]]; then
+        local defecto
+        defecto="$(whoami)"
+        read -rp "Ingrese nombre de usuario [${defecto}]: " valor
+        valor="${valor:-$defecto}"
+
+        if ! id "$valor" >/dev/null 2>&1; then
+            echo "[!] Error: El usuario '$valor' no existe en el sistema."
+            return
+        fi
+
+        read -rp "Intervalo de refresco en segundos [2]: " intervalo
+        intervalo="${intervalo:-2}"
+        if [[ ! "$intervalo" =~ ^[0-9]+$ ]] || (( intervalo < 1 )); then
+            intervalo=2
+        fi
+
+        salida_bucle=0
+        trap 'salida_bucle=1' INT
+
+        while (( salida_bucle == 0 )); do
+            clear
+            echo "=============================================================================="
+            echo "  MONITOR EN TIEMPO REAL POR USUARIO: ${valor}  |  Refresco: ${intervalo}s  |  [Ctrl+C para salir]"
+            echo "=============================================================================="
+            echo "Hora: $(date '+%H:%M:%S')  |  Host: $(hostname)"
+            echo ""
+            ps -u "$valor" -o pid,ppid,stat,%cpu,%mem,etime,comm --sort=-%cpu 2>/dev/null | head -n 25
+            sleep "$intervalo"
+        done
+
+        trap - INT
+        echo -e "\n[✔] Monitor detenido."
+
+    elif [[ "$tipo" == "2" ]]; then
+        read -rp "Ingrese el PID a monitorear: " valor
+        if [[ ! "$valor" =~ ^[0-9]+$ ]] || [[ ! -d "/proc/$valor" ]]; then
+            echo "[!] Error: El PID '$valor' no es válido o el proceso ya no existe."
+            return
+        fi
+
+        read -rp "Intervalo de refresco en segundos [1]: " intervalo
+        intervalo="${intervalo:-1}"
+        if [[ ! "$intervalo" =~ ^[0-9]+$ ]] || (( intervalo < 1 )); then
+            intervalo=1
+        fi
+
+        salida_bucle=0
+        trap 'salida_bucle=1' INT
+
+        while (( salida_bucle == 0 )); do
+            clear
+            echo "=============================================================================="
+            echo "  MONITOR EN TIEMPO REAL POR PID: ${valor}  |  Refresco: ${intervalo}s  |  [Ctrl+C para salir]"
+            echo "=============================================================================="
+            echo "Hora: $(date '+%H:%M:%S')  |  Host: $(hostname)"
+            echo ""
+            if [[ ! -d "/proc/$valor" ]]; then
+                echo "[!] El proceso con PID ${valor} ha finalizado."
+                break
+            fi
+            ps -p "$valor" -o pid,ppid,user,stat,nice,%cpu,%mem,rss,etime,comm
+            sleep "$intervalo"
+        done
+
+        trap - INT
+        echo -e "\n[✔] Monitor por PID detenido."
+    else
+        echo "[!] Filtro inválido."
+    fi
 }
 
 menu_principal() {
