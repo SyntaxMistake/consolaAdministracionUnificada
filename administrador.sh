@@ -12,6 +12,19 @@ mostrar_encabezado() {
     echo -e "======================================================================\n"
 }
 
+opcion_5(){
+	echo -e "=================================================================="
+	echo -e "MONITOR EN TIEMPO REAL"
+	echo -e "=================================================================="
+	local tipo valor
+	echo -e "Filtrar por:\n [1] Usuario\n [2] PID especifico\n"
+	echo -e ""
+	tipo = $(pedir_dato "Seleccione filtro [1-2]")
+
+	if [[ "$tipo" == "1" ]]; then
+
+}
+
 menu_principal() {
     local opcion
     while true; do
