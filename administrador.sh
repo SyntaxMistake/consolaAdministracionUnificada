@@ -1,17 +1,29 @@
 #!/usr/bin/env bash
 
+TITULO_PROYECTO="Asistente Interactivo de Control y Auditorioa de procesos"
+GRUPO="Grupo #7"
+
+mostrar_encabezado() {
+    clear
+    echo -e "======================================================================"
+    echo -e "        UNIVERSIDAD TECNOLÓGICA DE PANAMÁ - FISC                      "
+    echo -e "  Proyecto: ${TITULO_PROYECTO}"
+    echo -e "  ${GRUPO} "
+    echo -e "======================================================================\n"
+}
+
 menu_principal() {
     local opcion
     while true; do
         mostrar_encabezado
-        echo -e "${BOLD}MENÚ PRINCIPAL DE OPCIONES:${RESET}\n"
-        echo -e "  ${CYAN}[1]${RESET} Opción 1 - Filtro de procesos"
-        echo -e "  ${CYAN}[2]${RESET} Opción 2 - Arbol completo de PID"
-        echo -e "  ${CYAN}[3]${RESET} Opción 3 - Inspeccion de recursos de un PID"
-        echo -e "  ${CYAN}[4]${RESET} Opcion 4 - Control de prioridad y senales"
-	echo -e "  ${CYAN}[5]${RESET} Opcion 5 - Monitor en tiempo real"
-        echo -e "  ${RED}[0]${RESET} Salir del aplicativo\n"
-        echo -e "${CYAN}----------------------------------------------------------------------${RESET}"
+        echo -e "MENÚ PRINCIPAL DE OPCIONES:\n"
+        echo -e "  [1] Opción 1 - Filtro de procesos"
+        echo -e "  [2] Opción 2 - Arbol completo de PID"
+        echo -e "  [3] Opción 3 - Inspeccion de recursos de un PID"
+        echo -e "  [4] Opcion 4 - Control de prioridad y senales"
+	echo -e "  [5] Opcion 5 - Monitor en tiempo real"
+        echo -e "  [0] Salir del aplicativo\n"
+        echo -e "----------------------------------------------------------------------"
         read -rp "Seleccione una opción [0-4]: " opcion
 
         case $opcion in
@@ -21,11 +33,11 @@ menu_principal() {
             4) opcion_4 ;;
 	    5) opcion_5 ;;
 	    0)
-                echo -e "\n${GREEN}Saliendo del sistema."
+                echo -e "\nSaliendo del sistema.\n"
                 exit 0
                 ;;
             *)
-                echo -e "\n${RED}[!] Opción inválida. Intente nuevamente.${RESET}"
+                echo -e "\n[!] Opción inválida. Intente nuevamente."
                 sleep 1.5
                 ;;
         esac
