@@ -1,4 +1,4 @@
-nano prueba_arbol.sh
+#!/bin/bash
 
 # ==============================================================================
 # Opción 2: Árbol completo de PID y evaluación de impacto
@@ -168,16 +168,16 @@ opcion_2() {
     OTRO_USUARIO=0
     USUARIO_OBJETIVO="$raiz_usr"
 
-    printf '----------------------------------------------------------------------\n'
+    printf -- '----------------------------------------------------------------------\n'
     printf '  Proceso objetivo : PID %s | PPID %s | Usuario: %s | Estado: %s\n' \
         "$raiz_pid" "$raiz_ppid" "$raiz_usr" "$raiz_est"
     printf '  Comando          : %s\n' "$raiz_cmd"
-    printf '----------------------------------------------------------------------\n'
+    printf -- '----------------------------------------------------------------------\n'
     printf '  Jerarquia detectada:\n'
 
     _recorrer_arbol_pid "$raiz_pid" "  " 1 0
 
-    printf '----------------------------------------------------------------------\n'
+    printf -- '----------------------------------------------------------------------\n'
     printf '  Evaluacion de impacto antes de detener:\n'
     printf '  * Descendientes detectados : %d proceso(s)' "$TOTAL_DESCENDIENTES"
     if ((TOTAL_DESCENDIENTES > 0)); then
@@ -204,7 +204,7 @@ opcion_2() {
     while [[ -n "$ancestro_actual" && "$ancestro_actual" != "0" && -r "/proc/$ancestro_actual/stat" ]]; do
         if [[ "$ancestro_actual" == "$raiz_pid" ]]; then
             [[ "$riesgo" != "CRITICO" ]] && riesgo="ALTO"
-            avisos+=("El PID %s forma parte de la cadena de la sesion/consola actual." "$raiz_pid")
+            avisos+=("El PID $raiz_pid forma parte de la cadena de la sesion/consola actual.")
             break
         fi
         local s_raw s_rest s_ppid
@@ -226,8 +226,7 @@ opcion_2() {
 
     if ((TOTAL_DESCENDIENTES > 0)); then
         [[ "$riesgo" == "BAJO" ]] && riesgo="MEDIO"
-        avisos+=("Detener el PID %s puede dejar %d descendiente(s) huerfano(s) (adoptados por PID 1)." \
-            "$raiz_pid" "$TOTAL_DESCENDIENTES")
+        avisos+=("Detener el PID $raiz_pid puede dejar $TOTAL_DESCENDIENTES descendiente(s) huerfano(s) (adoptados por PID 1).")
     fi
 
     if ((OTRO_USUARIO == 1)); then

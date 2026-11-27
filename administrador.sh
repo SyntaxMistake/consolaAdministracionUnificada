@@ -138,6 +138,7 @@ fi
 source "$RUTA_SCRIPT/control_procesos.sh"
 source "$RUTA_SCRIPT/filtrar_procesos.sh"
 source "$RUTA_SCRIPT/buscar_procesos.sh"
+source "$RUTA_SCRIPT/prueba_arbol.sh"
 
 opcion_3() {
     local modulo="$RUTA_SCRIPT/revision_archivo_auditoria.sh"
