@@ -107,7 +107,7 @@ menu_principal() {
 	echo -e "  [5] Opcion 5 - Monitor en tiempo real"
         echo -e "  [0] Salir\n"
         echo -e "----------------------------------------------------------------------"
-        read -rp "Seleccione una opción [0-4]: " opcion
+        read -rp "Seleccione una opción [0-5]: " opcion
 
         case $opcion in
             1) opcion_1 ;;
@@ -134,5 +134,19 @@ if [[ ! -f "$RUTA_SCRIPT/control_procesos.sh" ]]; then
     exit 1
 fi
 source "$RUTA_SCRIPT/control_procesos.sh"
+
+opcion_3() {
+    local modulo="$RUTA_SCRIPT/revision_archivo_auditoria.sh"
+
+    if [ ! -f "$modulo" ]; then
+        echo -e "\n[!] No se encontró '$modulo'."
+        read -rp "Presione Enter para volver al menú..."
+        return
+    fi
+
+    bash "$modulo"
+    echo
+    read -rp "Presione Enter para volver al menú..."
+}
 
 menu_principal
